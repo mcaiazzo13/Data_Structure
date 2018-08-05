@@ -1,0 +1,313 @@
+#include <stidio.h>
+#include <string.h>
+#include <stdlib.h>
+
+//-------------------------------------------------------LINKED LIST---------------------------------------------------
+struct nodo{
+    int dato;
+    struct nodo *pNext;
+};
+typedef struct nodo Nodo;
+
+Nodo *testa = NULL;
+//-------------------------------cerca nodo per inserire ed eliminare nel mezzo
+Nodo cerca_nodo(int info){
+    Nodo *pt;
+    pt = testa;
+    do{
+        if(pt->dato == info){
+            printf("\n*Dato esistente e trovato.\n");
+        }
+        pt = pt->pNext;
+    }while(pt->dato == info);
+    
+    return *pt;
+}
+//-------------------------------inserisce un dato e lo sostituisce alla testa
+void inserimento_testa(int info){
+    Nodo *nuovoNodo;
+    nuovoNodo = malloc(sizeof(Nodo));
+    nuovoNodo->dato = info;
+    nuovoNodo->pNext = NULL;
+    
+    if(testa == NULL){
+        testa = nuovoNodo;
+    }
+    else{
+        nuovoNodo->pNext = testa;
+        testa = nuovoNodo;
+    }
+}
+//-------------------------------inserisce un dato e lo inserisce nella posizione che si vuole (con input opportuno)
+void inserimento_mezzo(int info1,int info2){
+    // cercare info2 poi info1 punta a quello che info2 punta e info2 punta a info1.
+    Nodo *nuovoNodo;
+    nuovoNodo = malloc(sizeof(Nodo));
+    nuovoNodo->dato = info1;
+    nuovoNodo->pNext = NULL;
+    
+    Nodo *pt;
+    pt = testa;
+    do{
+        if(pt->dato == info2){
+            printf("Elemento trovato");
+        }
+        else{
+        pt = pt->pNext;
+        }
+    }while(pt->dato != info2);
+    
+    
+    nuovoNodo->pNext = pt->pNext;
+    pt->pNext = nuovoNodo;
+}
+
+// ELIMINAZIONE
+
+// elimina il nodo a testa e lo sostituisce con quello successivo
+void eliminazione_testa(){
+    if (testa == NULL){
+        printf("Non è possibile eliminare poichè la lista è vuota.");
+    }
+    else{
+        Nodo *pr;
+        pr = testa->pNext;
+        free(testa);
+        testa = pr;
+    }
+}
+// elimina il dato in qualsiasi posizione si trova cercando il dato/chiave del nodo
+void eliminazione_mezzo(int info1){
+    // cerca il nodo da eliminare e lo elimina dopo aver fatto gli opportuni scambi di link
+    Nodo *pt,*pr;
+    pt = testa;
+    pr = testa;
+    do{ // cerca nodo
+        if(pt->dato == info1){
+            printf("elemento trovato");
+        }
+        else{
+            pr = pt;
+            pt = pt->pNext;
+        }
+    }while(pt->dato != info1);
+    
+    printf("\n *** Elemento -> %d",pt->dato);
+    pr->pNext = pt->pNext;
+    free(pt);
+ }
+// stampa lista dalla testa in poi
+void visita(){
+    if(testa == NULL){
+        printf("Lista vuota.");
+    }
+    else{
+        Nodo *pt;
+        pt = testa;
+        do{
+            printf("%d \n",pt->dato);
+            pt = pt->pNext;
+        }while(pt != NULL);
+    }
+}
+int main(){
+    int scelta,dato,dato1;
+    do{
+    puts("\n MENU \n\n 1.inserimento testa \n 2.inserimento mezzo \n 3.eliminazione testa \n 4.eliminazione mezzo \n 5.visita \n");
+    scanf("%d",&scelta);
+    switch (scelta) {
+        case 1: // funziona
+            puts("inserire dato");
+            scanf("%d",&dato);
+            inserimento_testa(dato);
+            break;
+        case 2: // funziona
+            puts("inserire dato da inserire ");
+            scanf("%d",&dato);
+            puts("inserire dato da cercare ");
+            scanf("%d",&dato1);
+            inserimento_mezzo(dato, dato1);
+            break;
+        case 3: // funziona
+            eliminazione_testa();
+            break;
+        case 4: // da fare
+            puts("inserire dato");
+            scanf("%d",&dato);
+            eliminazione_mezzo(dato);
+            break;
+        case 5: // funziona
+            visita();
+            break;
+        default:
+            break;
+    }
+    }while(scelta != 6);
+}
+
+
+//----------------------------------------------------------QUEQUE-----------------------------------------------------
+struct nodo{
+    int info;
+    struct nodo *pNext;
+};
+typedef struct nodo Nodo;
+
+Nodo *testa = NULL;
+Nodo *coda = NULL;
+
+// si inserisce dall'ultimo e poi si dividono testa e coda
+void inserimento_coda(int dato){
+    Nodo *nodoNuovo;
+    nodoNuovo = malloc(sizeof(Nodo));
+    nodoNuovo->info = dato;
+    nodoNuovo->pNext = NULL;
+    
+    if(testa == NULL){ // coda vuota allora bisogna inserire un dato nuovo (unico) che sia testa e coda
+        testa = nodoNuovo;
+        nodoNuovo->pNext = NULL;
+        coda = nodoNuovo;
+    }
+    else{
+        // coda non vuota ma che contiene dei nodi e quindi bisogna inserire cioè accodare un nuovo nodo
+        nodoNuovo->pNext = coda;
+        coda = nodoNuovo;
+    }
+}
+// essendo una coda si esce da esse solo quando si è la testa quindi si elimina la testa e si sostiuisce il nomimativo
+void eliminazione_testa(){
+    // bisogna cercare partendo dalla coda il nodo che punta alla testa e farlo diventare testa
+    if(coda->info == testa->info){
+        coda = NULL;
+        testa = NULL;
+    }
+    else{
+    
+    Nodo *pt;
+    pt = coda;
+    
+    while(pt != NULL){
+        if(pt->pNext == testa){
+            printf("elem -> %d",pt->info);
+            pt->pNext = testa->pNext;
+            free(testa);
+            testa = pt;
+        }
+        pt = pt->pNext;
+    }
+    }
+}
+// mostra tutta la coda dal basso verso l'alto quindi dalla coda alla testa.
+// l'elemento piu in alto sara la coda
+void visita(){
+    if(testa == NULL){
+        printf("Coda vuota.");
+    }
+    else{
+    Nodo *pt;
+    pt = coda;
+    do{
+        printf("Elem -> %d \n",pt->info);
+        pt = pt->pNext;
+    }while(pt != NULL);
+    }
+}
+
+int main(){
+    int scelta,dato;
+    do{
+    puts("\n MENU \n\n1.inserimento \n2.eliminazione \n3.visita \n");
+    scanf("%d",&scelta);
+    switch (scelta) {
+        case 1: // ins
+            puts("Inserire dato");
+            scanf("%d",&dato);
+            inserimento_coda(dato);
+            break;
+        case 2: // elim
+            eliminazione_testa();
+            break;
+        case 3: // vis
+            visita();
+            break;
+        default: printf("Riprova");
+            break;
+    }
+    }while(scelta != 4);
+}
+
+
+//--------------------------------------------------------STACK-------------------------------------------------------
+
+struct nodo{
+    int info;
+    struct nodo *pNext;
+};
+typedef struct nodo Nodo;
+
+Nodo *testa = NULL;
+
+void inserimento_testa(int info){
+    Nodo *nodoNuovo;
+    nodoNuovo = malloc(sizeof(Nodo));
+    nodoNuovo->info = info;
+    nodoNuovo->pNext = NULL;
+    
+    if(testa == NULL){
+        testa = nodoNuovo;
+    }
+    else{
+        nodoNuovo->pNext = testa;
+        testa = nodoNuovo;
+    }
+}
+
+void eliminazione_testa(){
+    if(testa == NULL){
+        puts("Lo stack è vuoto.");
+    }
+    else{
+        Nodo *pt;
+        pt = testa->pNext;
+        free(testa);
+        testa = pt;
+    }
+}
+
+void visita(){
+    if(testa == NULL){
+        puts("Stack vuoto");
+    }
+    else{
+        Nodo *pt;
+        pt = testa;
+        do{
+            printf("Elem ->%d \n",pt->info);
+            pt = pt->pNext;
+            
+        }while(pt != NULL);
+    }
+}
+
+int main(){
+    int scelta,dato;
+    do{
+        puts("\n MENU \n\n1.inserimento \n2.eliminazione \n3.visita \n");
+        scanf("%d",&scelta);
+        switch (scelta) {
+            case 1: // ins
+                puts("Inserire dato");
+                scanf("%d",&dato);
+                inserimento_testa(dato);
+                break;
+            case 2: // elim
+                eliminazione_testa();
+                break;
+            case 3: // vis
+                visita();
+                break;
+            default: printf("Riprova");
+                break;
+        }
+    }while(scelta != 4);
+}
