@@ -1,0 +1,236 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+//--------------------------------------------BINARY TREE WITHOUT DELETE FUNCTION---------------------------------------
+struct nodo{
+    int info;
+    struct nodo *Sx;
+    struct nodo *Dx;
+    struct nodo *padre;
+};
+typedef struct nodo Nodo;
+
+Nodo *radice = NULL;
+
+void inserimento(int dato){
+// se radice null allora inserire radice con figli null
+    Nodo *nodoNuovo;
+    nodoNuovo = malloc(sizeof(Nodo));
+    nodoNuovo->info = dato;
+    nodoNuovo->Dx = NULL;
+    nodoNuovo->Sx = NULL;
+    nodoNuovo->padre = NULL;
+    
+    // la radice non è vuota quindi bisogna scendere di livello.
+        Nodo *x,*y;
+        y = NULL;
+        x = radice;
+        while (x != NULL) { // questo blocco WHILE serve per trovare un posto NULL per il nuovoNodo
+            y = x;          // quando trova il NULL allora esce e quello è il posto del nuovoNodo
+            if (nodoNuovo->info < x->info) {
+                x = x->Sx;
+            }
+            else{
+                x = x->Dx;
+            }
+        }
+    
+        nodoNuovo->padre = y;
+        if(y == NULL){
+            radice = nodoNuovo;
+        }
+        else if(nodoNuovo->info < y->info){
+            y->Sx = nodoNuovo;
+        }
+        else{
+            y->Dx = nodoNuovo;
+        }
+    
+}
+void inOrder(Nodo *pt){
+    if(pt != NULL){
+        printf("elemento -> %d \n",pt->info);
+        inOrder(pt->Sx);
+        inOrder(pt->Dx);
+    }
+}
+void postOrder(Nodo *pt){
+    if(pt != NULL){
+        printf("elemento -> %d \n",pt->info);
+        postOrder(pt->Dx);
+        postOrder(pt->Sx);
+    }
+}
+void simmetrica(Nodo *pt){
+    if(pt != NULL){
+        simmetrica(pt->Sx);
+        printf("elemento -> %d \n",pt->info);
+        simmetrica(pt->Dx);
+    }
+}
+
+void gestioneVisita(){
+    int scelta;
+    puts("\n1.in Order \n2.post Order \n3.simmetrica\n");
+        scanf("%d",&scelta);
+        switch (scelta) {
+            case 1: //inorder
+                inOrder(radice);
+                break;
+            case 2: //postorder
+                postOrder(radice);
+                break;
+            case 3: //simmetrica
+                simmetrica(radice);
+                break;
+            default:
+                break;
+        }
+}
+
+int main(){
+    int scelta,info;
+    do{
+    puts("\n MENU \n\n1.inserimento \n2.visita \n");
+    scanf("%d",&scelta);
+    switch (scelta) {
+        case 1: // inserimento
+            puts("Inserire info");
+            scanf("%d",&info);
+            inserimento(info);
+            break;
+        case 2: // visita
+            gestioneVisita();
+            break;
+
+        default: puts("Riprova");
+            break;
+    }
+    }while(scelta != 3);
+}
+
+//-------------------------------------BINARY SEARCH TREE WITHOUT DELETE FUNCTION---------------------------------------
+
+struct nodo{
+    int info;
+    struct nodo *Sx;
+    struct nodo *Dx;
+    struct nodo *padre;
+};
+typedef struct nodo Nodo;
+
+Nodo *radice = NULL;
+
+void inserimento(int info){
+    Nodo *nodoNuovo;
+    nodoNuovo = malloc(sizeof(Nodo));
+    nodoNuovo->info = info;
+    nodoNuovo->Dx = NULL;
+    nodoNuovo->Sx = NULL;
+    nodoNuovo->padre = NULL;
+    
+    Nodo *x,*y;
+    x = radice;
+    y = NULL;
+    while(x != NULL){
+        y = x;
+        if(nodoNuovo->info < x->info){
+            x = x->Sx;
+        }
+        else{
+            x = x->Dx;
+        }
+    }
+    
+    nodoNuovo->padre = y;
+    if(y == NULL){
+        radice = nodoNuovo;
+    }
+    else if(nodoNuovo->info < y->info){
+        y->Sx = nodoNuovo;
+    }
+    else{
+        y->Dx = nodoNuovo;
+    }
+}
+
+int cercaNodo(Nodo *pt,int info){ // specialità degli ABR
+    if(pt->info == info){
+        printf("TROVATO !");
+        return pt->info;
+    }
+    else if(pt->info > info){
+        cercaNodo(pt->Sx, info);
+    }
+    else{
+        cercaNodo(pt->Dx, info);
+    }
+    return 0;
+}
+
+void inOrder(Nodo *pt){
+    if(pt != NULL){
+        printf("elemento -> %d \n",pt->info);
+        inOrder(pt->Sx);
+        inOrder(pt->Dx);
+    }
+}
+void postOrder(Nodo *pt){
+    if(pt != NULL){
+        printf("elemento -> %d \n",pt->info);
+        postOrder(pt->Dx);
+        postOrder(pt->Sx);
+    }
+}
+void simmetrica(Nodo *pt){
+    if(pt != NULL){
+        simmetrica(pt->Sx);
+        printf("elemento -> %d \n",pt->info);
+        simmetrica(pt->Dx);
+    }
+}
+
+void gestioneVisita(){
+    int scelta;
+    puts("\n1.in Order \n2.post Order \n3.simmetrica\n");
+    scanf("%d",&scelta);
+    switch (scelta) {
+        case 1: //inorder
+            inOrder(radice);
+            break;
+        case 2: //postorder
+            postOrder(radice);
+            break;
+        case 3: //simmetrica
+            simmetrica(radice);
+            break;
+        default:
+            break;
+    }
+}
+
+int main(){
+    int scelta,info;
+    do{
+    puts("\nMenu \n1.inserimento \n2.cerca \n3.visita\n");
+    scanf("%d",&scelta);
+    switch (scelta) {
+        case 1: // ins
+            puts("Inserire dato da inserire->");
+            scanf("%d",&info);
+            inserimento(info);
+            break;
+        case 2: // cerca
+            puts("Inserire dato da cercare->");
+            scanf("%d",&info);
+            cercaNodo(radice, info);
+            break;
+        case 3: // visita
+            gestioneVisita();
+            break;
+        default:
+            break;
+    }
+    }while(scelta != 4);
+}
+
