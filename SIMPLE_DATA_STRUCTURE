@@ -10,7 +10,7 @@ struct nodo{
 typedef struct nodo Nodo;
 
 Nodo *testa = NULL;
-//-------------------------------cerca nodo per inserire ed eliminare nel mezzo
+//-------------------------------search node for insert and remove in the center
 Nodo cerca_nodo(int info){
     Nodo *pt;
     pt = testa;
@@ -23,7 +23,7 @@ Nodo cerca_nodo(int info){
     
     return *pt;
 }
-//-------------------------------inserisce un dato e lo sostituisce alla testa
+//-------------------------------insert node and sobstitution on the head
 void inserimento_testa(int info){
     Nodo *nuovoNodo;
     nuovoNodo = malloc(sizeof(Nodo));
@@ -38,7 +38,7 @@ void inserimento_testa(int info){
         testa = nuovoNodo;
     }
 }
-//-------------------------------inserisce un dato e lo inserisce nella posizione che si vuole (con input opportuno)
+//-------------------------------insert a data and insert it in desidered position (with the right input)
 void inserimento_mezzo(int info1,int info2){
     // cercare info2 poi info1 punta a quello che info2 punta e info2 punta a info1.
     Nodo *nuovoNodo;
@@ -62,9 +62,9 @@ void inserimento_mezzo(int info1,int info2){
     pt->pNext = nuovoNodo;
 }
 
-// ELIMINAZIONE
+// REMOVE
 
-// elimina il nodo a testa e lo sostituisce con quello successivo
+// remove the node head and switch it with his next
 void eliminazione_testa(){
     if (testa == NULL){
         printf("Non è possibile eliminare poichè la lista è vuota.");
@@ -76,7 +76,7 @@ void eliminazione_testa(){
         testa = pr;
     }
 }
-// elimina il dato in qualsiasi posizione si trova cercando il dato/chiave del nodo
+// remove data in whereever position searching it by the key 
 void eliminazione_mezzo(int info1){
     // cerca il nodo da eliminare e lo elimina dopo aver fatto gli opportuni scambi di link
     Nodo *pt,*pr;
@@ -96,7 +96,7 @@ void eliminazione_mezzo(int info1){
     pr->pNext = pt->pNext;
     free(pt);
  }
-// stampa lista dalla testa in poi
+//------------------------print the list from the head 
 void visita(){
     if(testa == NULL){
         printf("Lista vuota.");
@@ -113,7 +113,7 @@ void visita(){
 int main(){
     int scelta,dato,dato1;
     do{
-    puts("\n MENU \n\n 1.inserimento testa \n 2.inserimento mezzo \n 3.eliminazione testa \n 4.eliminazione mezzo \n 5.visita \n");
+    puts("\n MENU \n\n 1.insert head \n 2.insert middle \n 3.remove head \n 4.remove middle \n 5.print \n");
     scanf("%d",&scelta);
     switch (scelta) {
         case 1: // funziona
@@ -156,25 +156,25 @@ typedef struct nodo Nodo;
 Nodo *testa = NULL;
 Nodo *coda = NULL;
 
-// si inserisce dall'ultimo e poi si dividono testa e coda
+//-------------------------------insert from the last one and then we divide head and tail
 void inserimento_coda(int dato){
     Nodo *nodoNuovo;
     nodoNuovo = malloc(sizeof(Nodo));
     nodoNuovo->info = dato;
     nodoNuovo->pNext = NULL;
     
-    if(testa == NULL){ // coda vuota allora bisogna inserire un dato nuovo (unico) che sia testa e coda
+    if(testa == NULL){ // empty queue we have to insert a node head and tail in the same time
         testa = nodoNuovo;
         nodoNuovo->pNext = NULL;
         coda = nodoNuovo;
     }
     else{
-        // coda non vuota ma che contiene dei nodi e quindi bisogna inserire cioè accodare un nuovo nodo
+        // not empty queue so we have to insert a node
         nodoNuovo->pNext = coda;
         coda = nodoNuovo;
     }
 }
-// essendo una coda si esce da esse solo quando si è la testa quindi si elimina la testa e si sostiuisce il nomimativo
+//------------------------------- this is a queue so we remove the head end his previus become the head
 void eliminazione_testa(){
     // bisogna cercare partendo dalla coda il nodo che punta alla testa e farlo diventare testa
     if(coda->info == testa->info){
@@ -197,8 +197,8 @@ void eliminazione_testa(){
     }
     }
 }
-// mostra tutta la coda dal basso verso l'alto quindi dalla coda alla testa.
-// l'elemento piu in alto sara la coda
+//-------------------------------show the queue from the tail to the head
+// -------------------------------the higher value is the tail
 void visita(){
     if(testa == NULL){
         printf("Coda vuota.");
@@ -246,7 +246,7 @@ struct nodo{
 typedef struct nodo Nodo;
 
 Nodo *testa = NULL;
-
+// ------------------------------- insert the head of the stack
 void inserimento_testa(int info){
     Nodo *nodoNuovo;
     nodoNuovo = malloc(sizeof(Nodo));
@@ -261,7 +261,7 @@ void inserimento_testa(int info){
         testa = nodoNuovo;
     }
 }
-
+// ------------------------------- remove the stack's head
 void eliminazione_testa(){
     if(testa == NULL){
         puts("Lo stack è vuoto.");
@@ -273,7 +273,7 @@ void eliminazione_testa(){
         testa = pt;
     }
 }
-
+// ------------------------------- print the stack
 void visita(){
     if(testa == NULL){
         puts("Stack vuoto");
@@ -292,7 +292,7 @@ void visita(){
 int main(){
     int scelta,dato;
     do{
-        puts("\n MENU \n\n1.inserimento \n2.eliminazione \n3.visita \n");
+        puts("\n MENU \n\n1.insert \n2.remove \n3.print \n");
         scanf("%d",&scelta);
         switch (scelta) {
             case 1: // ins
