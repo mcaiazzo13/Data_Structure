@@ -1,8 +1,8 @@
-// oriented graph using a static matrix with BFS and DFS visit
+// ------------------------------------------DIRECTED GRAPH ADJ MATRIX BFS AND DFS----------------------------------
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-// --------------------------------------------------- NODE STRUCT----------------------------------------------------------
+// --------------------------------------------------- NODE STRUCT--------------------------------------------------
 struct node{
   int name;
   int color;
