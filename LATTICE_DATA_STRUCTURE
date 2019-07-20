@@ -1,4 +1,4 @@
-// oriented graph using matrix
+// oriented graph using a static matrix with BFS and DFS visit
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -27,7 +27,7 @@ void insertLink(Tnode *nodes[]);
 void removeLink(Tnode *nodes[]);
 // print
 void printGraphBFS(Tnode *nodes[],int source);
-void printGraphDFS();
+void printGraphDFS(Tnode *nodes[],int node);
 //------------------------------- IS EMPTY
 int isEmpty(){
   if(head == -1 || head > tail)
@@ -108,6 +108,19 @@ void printGraphBFS(Tnode *nodes[],int source){
     printf("Nodo visitato BLACK %d\n",nodes[nodeIndex]->name);
   }
 }
+//------------------------------ PRINT GRAPH DFS
+void printGraphDFS(Tnode *nodes[],int node){
+  int j;
+  printf("Nodo visitato %d\n",node);
+  nodes[node]->color = 1;
+  for (j = 0; j < n; j++){
+    if(!nodes[j]->color && matrix[node][j] == 1){
+      printGraphDFS(nodes,j);
+   }
+  }
+}
+
+
 //----------------------------------------- MAIN
 int main(int argc,char *argv[]){
   int i;
@@ -134,8 +147,7 @@ int main(int argc,char *argv[]){
      .
      .
   */
- // this is just to make everything fast
- // if you want a dynamic one just delete and use the function "insertLink"
+ 
   matrix[0][1] = 1;
   matrix[0][3] = 1;
   matrix[1][4] = 1;
@@ -150,7 +162,7 @@ int main(int argc,char *argv[]){
  
   int choice,source;
   do{
-    printf("\n1.insert link \n2.remove link \n3. BFS \n");
+    printf("\n1.insert link \n2.remove link \n3.BFS \n4.DFS \n");
     scanf("%d",&choice);
     fflush(stdin);
     switch(choice){
@@ -168,10 +180,11 @@ int main(int argc,char *argv[]){
     case 4: // print matrix DFS
       printf("insert source :");
       scanf("%d",&source);                                                                                                                                                                    
-      printf("DFS is in progress\n");
-      printGraphDFS(nodes,source);
+      for(i=0;i<n;i++)
+        node[i]->color = 0;
+      printGraphDFS(node,source);
       break;
     }
   }while(choice != 5);
   return 0;
-}
+  }
