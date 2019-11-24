@@ -1,4 +1,4 @@
-//-----------------------------------------NOT DIRECTED GRAPH MATRIX BFS AND DFS VISIT----------------------------------------
+//-----------------------------------------UNDIRECTED GRAPH MATRIX BFS AND DFS VISIT----------------------------------------
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
