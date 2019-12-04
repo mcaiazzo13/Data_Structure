@@ -1,0 +1,169 @@
+#include <iostream>
+
+using namespace std;
+
+class Nodo{
+private:
+	int key;
+	int color; // 0 black | 1 red
+	Nodo* Dx;
+	Nodo* Sx;
+	Nodo* Px; // parent
+public:
+	Nodo(int key,int color,Nodo *Sx,Nodo *Dx,Nodo *Px){
+		this->key = key;
+		this->color = color;
+		this->Sx = Sx;
+		this->Dx = Dx;
+		this->Px = Px;
+	}
+	void setKey(int k){
+		key = k;
+	}
+	void setColor(int c){
+		color = c;
+	}
+	void setPx(Nodo* Px){
+		this->Px = Px;
+	}
+	void setSx(Nodo* Sx){
+		this->Sx = Sx;
+	}
+	void setDx(Nodo* Dx){
+		this->Dx = Dx;
+	}
+	int getKey(){
+		return this->key;
+	}
+	int getColor(){
+		return this->color;
+	}
+	Nodo* getDx(){
+		return this->Dx;
+	}
+	Nodo* getSx(){
+		return this->Sx;
+	}
+	Nodo* getPx(){
+		return this->Px;
+	}
+};
+
+class RB{
+private:
+	Nodo* root; // radice dell'albero
+	 
+	// -------------------------- insert node
+	void insertNode(Nodo *node){
+    Nodo *y = nullptr;
+    Nodo *x = this->root;
+    while(x != nullptr){
+      y = x;
+      if(node->getKey() < x->getKey())
+	x = x->getSx();
+      else
+	x = x->getDx();
+    }
+    node->setPx(y);
+    if(y == nullptr)
+      this->root = node;
+    else if(node->getKey() < y->getKey())
+      y->setSx(node);
+    else
+      y->setDx(node);
+  }
+  // ----------------------------- left rotate
+	void leftRotate(Nodo *nodo){
+		Nodo *y = nodo->getDx();
+		nodo->setDx(y->getSx());
+		if(y->getSx() != nullptr)
+			y->getPx()->setPx(nodo);
+		y->setPx(nodo->getPx());
+		if(nodo->getPx() == nullptr)
+			this->root = y;
+		else if(nodo == nodo->getPx()->getSx())
+			nodo->getPx()->setSx(y);
+		else
+			nodo->getPx()->setDx(y);
+		y->setSx(nodo);
+		nodo->setPx(y);
+	}
+	// -------------------------- right rotate
+	void rightRotate(Nodo *nodo){
+		Nodo *y = nodo->getSx();
+		nodo->setSx(y->getDx());
+		if(y->getDx() != nullptr)
+			y->getDx()->setPx(nodo);
+		y->setPx(nodo->getPx());
+		if(nodo->getPx() == nullptr)
+			this->root = y;
+		else if(nodo == nodo->getPx()->getSx())
+			nodo->getPx()->setSx(y);
+		else
+			nodo->getPx()->setDx(y);
+		y->setDx(nodo);
+		nodo->setPx(y);
+	}
+	// --------------------------- fix up (insert)
+	void fixUp(Nodo *nodo){
+		while((nodo != this->root) && (nodo->getPx()->getColor() == 1)){
+			if(nodo->getPx() == nodo->getPx()->getPx()->getSx()){
+				Nodo* y = nodo->getPx()->getPx()->getDx();
+				if(y->getColor() == 1){
+					nodo->getPx()->setColor(0); // setta a nero
+					y->setColor(0); 
+					nodo->getPx()->getPx()->setColor(1);
+					nodo = nodo->getPx()->getPx();
+				} 
+				else if(nodo == nodo->getPx()->getDx()){
+					nodo = nodo->getPx();
+					this->leftRotate(nodo);
+				}	
+			nodo->getPx()->setColor(0);
+			nodo->getPx()->getPx()->setColor(1);
+			this->rightRotate(nodo->getPx()->getPx());
+		} 
+	else{
+		Nodo* y = nodo->getPx()->getPx()->getSx();
+		if(y->getColor() == 1){
+			nodo->getPx()->setColor(0); // setta a nero
+			y->setColor(0); 
+			nodo->getPx()->getPx()->setColor(1);
+			nodo = nodo->getPx()->getPx();
+		}
+		else if(nodo == nodo->getPx()->getSx()){
+			nodo = nodo->getPx();
+			this->rightRotate(nodo);
+		}
+		nodo->getPx()->setColor(0);
+		nodo->getPx()->getPx()->setColor(1);
+		this->leftRotate(nodo->getPx()->getPx());
+		}	
+	}
+	this->root->setColor(0);
+}
+// ------------------------ remove node
+
+
+
+public:
+RB(){
+    this->root = nullptr;
+  }
+	void insert(int key){
+		Nodo *aux = new Nodo(key,1,nullptr,nullptr,nullptr);
+		this->insertNode(aux);
+		this->fixUp(aux);
+	}
+};
+
+
+int main(){
+
+	RB mytree; 
+	mytree.insert(22);
+	mytree.insert(45);
+	mytree.insert(21);
+
+	return 0;
+}
